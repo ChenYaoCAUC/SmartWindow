@@ -1,0 +1,116 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+
+    <Button
+        android:id="@+id/buttonGetWindowStatus"
+        android:layout_width="90dp"
+        android:layout_height="35dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="230dp"
+        android:background="@drawable/btn_all_shape"
+        android:text="获取窗户状态" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="203dp"
+        android:background="@color/grey" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="400dp"
+        android:background="@color/grey" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="294dp"
+        android:background="@color/grey" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="111dp"
+        android:background="@color/grey" />
+
+    <Button
+        android:id="@+id/buttonGetRain"
+        android:layout_width="90dp"
+        android:layout_height="35dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="140dp"
+        android:background="@drawable/btn_all_shape"
+        android:text="获取雨滴状态" />
+
+    <TextView
+        android:id="@+id/textViewIsRain"
+        android:layout_width="90dp"
+        android:layout_height="35dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="171dp"
+        android:layout_marginBottom="136dp"
+        android:layout_toStartOf="@+id/buttonGetRain"
+        android:background="@drawable/btn_all_shape"
+        android:gravity="center"
+        android:text="晴朗"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewWindowState"
+        android:layout_width="90dp"
+        android:layout_height="35dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="171dp"
+        android:layout_marginBottom="230dp"
+        android:layout_toStartOf="@+id/buttonGetWindowStatus"
+        android:background="@drawable/btn_all_shape"
+        android:gravity="center"
+        android:text="打开"
+        android:textStyle="bold" />
+
+    <Switch
+        android:id="@+id/switchWindowState"
+        android:layout_width="wrap_content"
+        android:layout_height="87dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="333dp"
+        android:layout_marginEnd="27dp"
+        android:layout_marginBottom="311dp"
+        android:text=" 窗户状态"
+        android:textColor="@color/black"
+        android:textOff="窗户关闭"
+        android:textOn="窗户打开"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="-42dp"
+        android:layout_marginBottom="456dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/index" />
+
+    </RelativeLayout>
