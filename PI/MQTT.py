@@ -18,10 +18,15 @@ global_id = 1
 
 window_pin_num = 12
 rain_pin_num = 11
+light_pin_num = 15
+voice_pin_num = 7
 
 is_user_control = False
 is_window_open = True
 is_rain = False
+is_noisy = False
+is_glare = False
+is_sensor = True
 
 
 class WindowManager:
@@ -29,6 +34,8 @@ class WindowManager:
     def init():
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(rain_pin_num, GPIO.IN)
+        GPIO.setup(light_pin_num, GPIO.IN)
+        GPIO.setup(voice_pin_num, GPIO.IN)
 
     @staticmethod
     def control_window(open):
@@ -47,6 +54,26 @@ class WindowManager:
         # 下雨
         else:
             return True
+
+    @staticmethod
+    def noisy():
+        # 不吵闹
+        if GPIO.input(voice_pin_num):
+            return False
+        # 吵闹
+        else:
+            return True
+
+
+    @staticmethod
+    def glare():
+        # 不刺眼
+        if GPIO.input(light_pin_num):
+            return False
+        # 刺眼
+        else:
+            return True
+
 
     @staticmethod
     def destroy():
@@ -145,12 +172,39 @@ class MqttsClient:
         payload_status = {
             "id": global_id,
             "dp": {
-                "window_status": [{"v": is_open}]
+                "isopen": [{"v": is_open}]
             }
         }
         global_id = global_id + 1
         topic = "$sys/275459/smartwindow_pi/dp/post/json"
         client.publish(topic, json.dumps(payload_status), 1)
+
+    @staticmethod
+    def publish_glare(is_glare):
+        global global_id
+        payload_glare = {
+            "id": global_id,
+            "dp": {
+                "isglare": [{"v": is_glare}]
+            }
+        }
+        global_id = global_id + 1
+        topic = "$sys/275459/smartwindow_pi/dp/post/json"
+        client.publish(topic, json.dumps(payload_glare), 1)
+
+    
+    @staticmethod
+    def publish_noisy(is_noisy):
+        global global_id
+        payload_noisy = {
+            "id": global_id,
+            "dp": {
+                "isnoisy": [{"v": is_noisy}]
+            }
+        }
+        global_id = global_id + 1
+        topic = "$sys/275459/smartwindow_pi/dp/post/json"
+        client.publish(topic, json.dumps(payload_noisy), 1)
 
     @staticmethod
     def publish_israin(is_rain):
@@ -170,23 +224,42 @@ class MqttsClient:
         global is_window_open
         global is_rain
         global is_user_control
+        global is_noisy
+        global is_glare
+        global is_sensor
         while True:
             is_rain = WindowManager.rain()
+            is_noisy = WindowManager.noisy()
+            is_glare = WindowManager.glare()
+            print("是否吵闹：")
+            print(is_noisy)
+            print("是否刺眼：")
+            print(is_glare)
+            print("是否下雨：")
             print(is_rain)
+            if is_rain is False and is_glare is False and is_noisy is False :
+                is_sensor = True
+            else:
+                is_sensor = False
             # 若传感器判断和用户的操作相同，则自解锁
-            if is_rain is not is_window_open:
+            if is_sensor is is_window_open:
                 is_user_control = False
             if not is_user_control:
-                WindowManager.control_window(not is_rain)
+                WindowManager.control_window(is_sensor)
             MqttsClient.publish_israin(is_rain)
+            MqttsClient.publish_noisy(is_noisy)
+            MqttsClient.publish_glare(is_glare)
             MqttsClient.publish_status(is_window_open)
             time.sleep(5)
 
-
-# @staticmethod
-# def window_controller():
+# 开关窗逻辑
 # 保证所有的窗户开关和传感器必须在一个线程里执行，必须是串行
 # 给窗户开关做一个队列
+# 下雨（true）关窗户
+# 阳光直射（true）关窗户
+# 吵闹（true）关窗户
+# 只要下雨就关窗户
+# 不下雨但是阳光直射或者噪声就关窗户
 
 
 if __name__ == '__main__':
